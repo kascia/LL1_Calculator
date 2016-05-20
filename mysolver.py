@@ -1,5 +1,5 @@
 from mytokenizer import Tokenizer
-#from parser import Parser
+from myparser import Parser
 
 class Solver:
     def __init__(self, strcalc):
@@ -11,10 +11,10 @@ class Solver:
         tokenizer.tokenize()
         tokens = tokenizer.get_tokens()
         
-#        parser = Parser(tokens)
-#        parser.parse()
-#        parser.calc()
-#        self.ans = parser.get_ans()               
-        self.ans = tokens
+        parser = Parser(tokens)
+        parser.parse()
+        parser.calc()
+        self.ans = parser.get_ans()               
+        
     def get_ans(self):        
         return self.ans

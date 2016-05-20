@@ -6,6 +6,24 @@ class Identifier:
             lexeme = c.lexeme
             return True if lexeme in ['SUB','ADD','DEV','MUL'] else False
         except:
+            print(c.lexeme)
+            raise NoLexemeError(c)
+            return False
+    
+    @staticmethod
+    def is_expop(c):
+        try:
+            lexeme = c.lexeme
+            return True if lexeme in ['SUB','ADD'] else False
+        except:
+            raise NoLexemeError()
+            return False
+    @staticmethod
+    def is_termop(c):
+        try:
+            lexeme = c.lexeme
+            return True if lexeme in ['DEV','MUL'] else False
+        except:
             raise NoLexemeError()
             return False
     
