@@ -1,4 +1,4 @@
-from tokenizer import Tokenizer
+from mytokenizer import Tokenizer
 #from parser import Parser
 
 class Solver:
