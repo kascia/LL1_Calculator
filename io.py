@@ -3,13 +3,18 @@ import sys
 class IO:
     def __init__(self):
         self.strcalc=''
-                
+        self.ans=0.0
+        
     def get_strcalc(self):
-        argc = len(sys.argv)
+        argv = sys.argv[1:]
+        argc = len(argv)
+        
         for i in range(argc):
             self.strcalc += argv[i]
-        return strcalc
+            
+        return self.strcalc
     
     def print_ans(self,ans):
-        return ans
+        self.ans = ans
+        print(self.ans)
     
