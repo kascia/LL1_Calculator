@@ -16,5 +16,5 @@ class IO:
     
     def print_ans(self,ans):
         self.ans = ans
-        print(self.ans)
+        print('answer' , self.ans)
     

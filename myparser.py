@@ -1,11 +1,10 @@
 from myidentifier import Identifier
 
 class Parser:
-    tokens=[]
-    ans = 0.0
+    
     def __init__(self, tokens):
+        self.ans = 0.0
         self.tokens = tokens
-        
         
     def parse(self):
         self.tree = self.take_expression(self.tokens)
@@ -21,12 +20,9 @@ class Parser:
         ops = []
         terms.append(self.take_term(tokens))
         
-        if len(tokens) == 0:
-            return Expression(terms,ops)
-        
         while len(tokens) != 0 and Identifier.is_expop(tokens[0]['instance']):
             tmp = tokens.pop(0)
-            print(tmp['instance'].value)
+            print('exprop', tmp['instance'].value)
             ops.append(tmp)
             terms.append(self.take_term(tokens))
         return Expression(terms, ops)
@@ -34,16 +30,14 @@ class Parser:
     def take_term(self, tokens):
         factors = []
         ops = []
+        print('termtoken',tokens)
         factors.append(self.take_factor(tokens))
-        if len(tokens) == 0:     
-            return Term(factors,ops)
         
         while len(tokens) != 0 and Identifier.is_termop(tokens[0]['instance']):
             tmp=tokens.pop(0)
-            print(tmp['instance'].value)
+            print('termop', tmp['instance'].value)
             ops.append(tmp)
             factors.append(self.take_factor(tokens))
-    
         return Term(factors,ops)
     
     
@@ -52,7 +46,6 @@ class Parser:
         options = { 'LPARAN':self.product_lparan, 
                    'SUB':self.product_sub, 
                    'NUMBER':self.product_number}
-        
         return options[tokens[0]['instance'].lexeme](tokens)
         
     def product_lparan(self,tokens):
@@ -66,24 +59,24 @@ class Parser:
     def product_sub(self, tokens):
         
         sub = tokens.pop(0) 
-        print(sub['instance'].value)
+        print('sub', sub['instance'].value)
         number = tokens.pop(0)
-        print(number['instance'].value)
+        print('number', number['instance'].value)
         ret = Factor(sub = sub, number = number)
         return ret
     
     def product_number(self, tokens):
         number = tokens.pop(0)
-        print(number['instance'].value)
+        print('number' , number['instance'].value)
         ret = Factor(number)
         return ret
         
         
 class Factor:
-    factorlist=[]
-    ans=0.0
+    
     def __init__(self,number=None,expr=None,sub=None):
-        
+        self.factorlist=[]
+        self.ans=0.0
         if expr == None:
             if sub == None:
                 self.factorlist.append(number)
@@ -95,17 +88,21 @@ class Factor:
     
     def calc(self):
         print(self.factorlist)
-        if Identifier.is_op(self.factorlist[0]['instance']):
-            self.factorlist.pop(0)
-            self.ans = -self.factorlist.pop(0)['instance'].value
-        else:
-            self.ans = self.factorlist.pop(0)['instance'].value
+        try:
+            if Identifier.is_op(self.factorlist[0]['instance']):
+                self.factorlist.pop(0)
+                self.ans = -1.0*float(self.factorlist.pop(0)['instance'].value)
+            else:
+                self.ans = float(self.factorlist.pop(0)['instance'].value)
+        except:
+            self.ans = self.factorlist.pop(0).calc()
         return self.ans
             
 class Term:
-    termlist = []    
-    ans=0.0
+    
     def __init__(self, factors, ops):
+        self.termlist = []    
+        self.ans=0.0
         self.termlist.append(factors[0])
      
         for i in range(len(ops)):
@@ -118,22 +115,22 @@ class Term:
         self.ans = self.termlist.pop(0).calc()
         option = {'DEV':self.dev, 'MUL':self.mul}
         for i in range(len(self.termlist)/2):
-            
-            option[self.termlist.pop(0)['instance'].lexeme](self.ans, self.termlist.pop(0))
+            self.ans = option[self.termlist.pop(0)['instance'].lexeme](self.ans, self.termlist.pop(0))
         
         return self.ans
         
-    def dev(val,token):
-        return val / token['instance'].value
-    def mul(val,token):
-        return val * token['instance'].value    
+    def dev(self, val,token):
+        return val / token.calc()
+    def mul(self, val,token):
+        return val * token.calc()
             
             
             
 class Expression:
-    exprlist = []
-    ans=0.0
+    
     def __init__(self, terms, ops):
+        self.exprlist = []
+        self.ans=0.0
         self.exprlist.append(terms[0])
         
         for i in range(len(ops)):
@@ -142,20 +139,21 @@ class Expression:
 
     def calc(self):
         
-        print(self.exprlist)
-        
         self.ans = self.exprlist.pop(0).calc()
         option = {'SUB':self.sub, 'ADD':self.add}
-        for i in range(len(exprlist)/2):
-            
-            option[exprlist.pop(0)['instance'].lexeme](self.ans,exprlist.pop(0))
+        for i in range(len(self.exprlist)/2):
+            self.ans = option[self.exprlist.pop(0)['instance'].lexeme](self.ans, self.exprlist.pop(0))
         
         return self.ans
         
-    def sub(val,token):
-        return val - token['instance'].value
-    def add(val,token):
-        return val + token['instance'].value    
+    def sub(self, val,token):
+        ret = val - token.calc()
+        print(ret)
+        return ret
+    def add(self, val,token):
+        ret = val + token.calc()
+        print(ret)
+        return ret
     
 class NoRParanException(Exception):        
     def __init__(self):

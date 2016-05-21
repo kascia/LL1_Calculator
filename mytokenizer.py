@@ -24,32 +24,37 @@ class Tokenizer:
         self.tokenize_numbers(str_,numbers)
         self.tokenize_ops(str_,ops)
         self.tokenize_parans(str_,parans)
-        
         self.tokens.sort(key=lambda dic: dic['index'])
     
     def get_tokens(self):
         return self.tokens
     
     def tokenize_numbers(self, str_, numbers):
+        findfrom = 0
         for i in range(len(numbers)):
             token = dict()
-            index = str_.find(numbers[i])
+            index = str_.find(numbers[i], findfrom)
+            findfrom = index + 1
             token['index'] = index
             token['instance'] = Number(numbers[i])
             self.tokens.append(token)
 
     def tokenize_ops(self, str_, ops):
-        for i in range(len(ops)):
+        findfrom = 0
+        for i in range(len(ops)):            
             token = dict()
-            index = str_.find(ops[i])
+            index = str_.find(ops[i], findfrom)
+            findfrom = index + 1
             token['index'] = index
             token['instance'] = Op.new_instance(ops[i])
             self.tokens.append(token)
     
     def tokenize_parans(self, str_, parans):
+        findfrom=0
         for i in range(len(parans)):
             token = dict()
-            index = str_.find(parans[i])
+            index = str_.find(parans[i], findfrom)
+            findfrom = index + 1
             token['index'] = index
             token['instance'] = Paran.new_instance(parans[i])
             self.tokens.append(token)  
