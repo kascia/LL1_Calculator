@@ -39,10 +39,10 @@ class Tokenizer:
     
     def tokenize_class(self, _str, items, _Class):
         findfrom = 0
-        for i in range(len(items)):
+        for item in items:
             token = dict()
-            index = _str.find(items[i], findfrom)
+            index = _str.find(item, findfrom)
             findfrom = index + 1
             token['index'] = index
-            token['instance'] = _Class.new_instance(items[i])
+            token['instance'] = _Class.new_instance(item)
             self.tokens.append(token)  

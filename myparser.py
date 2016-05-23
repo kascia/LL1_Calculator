@@ -4,7 +4,7 @@ from myidentifier import Identifier
 EBNF
 {} ; repeat more than or equal to 0.
 [] ; selective usage
-
+() ; choose one of among
 Expression := Term { ( '+' | '-' ) Term }
 Term       := Factor { ( '*' | '/' ) Factor }
 Factor     := ( '(' Expression ')' 
@@ -93,7 +93,7 @@ class Factor:
             self.factorlist.append(expr)
     
     def calc(self):
-        if Expression.is_expr(self.factorlist[0]):
+        if isinstance(self.factorlist[0],Expression):
             self.ans = self.factorlist.pop(0).calc()
             return self.ans
         else:
@@ -123,10 +123,6 @@ class Term:
         
         return self.ans
     
-    @staticmethod
-    def is_term(c):
-        return c.__class__.__name__ is 'Term'
-
 class Expression:
     
     def __init__(self, terms, ops):
@@ -146,11 +142,7 @@ class Expression:
             self.ans = option[self.exprlist.pop(0)['instance'].lexeme](self.ans, self.exprlist.pop(0).calc())
         
         return self.ans
-            
-    @staticmethod
-    def is_expr(c):
-        return c.__class__.__name__ is 'Expression'
-    
+        
 class NoRParanException(Exception):        
     def __init__(self):
         Exception.__init__(self,"No RPARAN Exception.") 
