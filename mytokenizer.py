@@ -30,32 +30,20 @@ class Tokenizer:
         return self.tokens
     
     def tokenize_numbers(self, str_, numbers):
-        findfrom = 0
-        for i in range(len(numbers)):
-            token = dict()
-            index = str_.find(numbers[i], findfrom)
-            findfrom = index + 1
-            token['index'] = index
-            token['instance'] = Number(numbers[i])
-            self.tokens.append(token)
+        self.tokenize_class(str_, numbers, Number)
 
     def tokenize_ops(self, str_, ops):
-        findfrom = 0
-        for i in range(len(ops)):            
-            token = dict()
-            index = str_.find(ops[i], findfrom)
-            findfrom = index + 1
-            token['index'] = index
-            token['instance'] = Op.new_instance(ops[i])
-            self.tokens.append(token)
+        self.tokenize_class(str_,ops,Op)
     
     def tokenize_parans(self, str_, parans):
+        self.tokenize_class(str_,parans,Paran)
+    
+    def tokenize_class(self, str_, items, Class_):
         findfrom=0
-        for i in range(len(parans)):
+        for i in range(len(items)):
             token = dict()
-            index = str_.find(parans[i], findfrom)
+            index = str_.find(items[i], findfrom)
             findfrom = index + 1
             token['index'] = index
-            token['instance'] = Paran.new_instance(parans[i])
+            token['instance'] = Class_.new_instance(items[i])
             self.tokens.append(token)  
-        

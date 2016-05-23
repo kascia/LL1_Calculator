@@ -1,50 +1,33 @@
 
 class Identifier:
+
     @staticmethod
     def is_op(c):
-        try:
-            lexeme = c.lexeme
-            return True if lexeme in ['SUB','ADD','DEV','MUL'] else False
-        except:
-            print(c.lexeme)
-            raise NoLexemeError(c)
-            return False
+        return Identifier.has_lexeme(c, ['SUB','ADD','DEV','MUL'])
     
     @staticmethod
     def is_expop(c):
-        try:
-            lexeme = c.lexeme
-            return True if lexeme in ['SUB','ADD'] else False
-        except:
-            raise NoLexemeError()
-            return False
+        return Identifier.has_lexeme(c, ['SUB','ADD'])
+        
     @staticmethod
     def is_termop(c):
-        try:
-            lexeme = c.lexeme
-            return True if lexeme in ['DEV','MUL'] else False
-        except:
-            raise NoLexemeError()
-            return False
+        return Identifier.has_lexeme(c, ['DEV','MUL'])
     
     @staticmethod
     def is_number(c):
-        try:
-            lexeme = c.lexeme
-            return True if lexeme in ['NUMBER'] else False
-        except:
-            raise NoLexemeError()
-            return False
+        return Identifier.has_lexeme(c, ['NUMBER'])
     
     @staticmethod
     def is_paran(c):
+        return Identifier.has_lexeme(c, ['LPARAN','RPARAN'])
+
+    @staticmethod
+    def has_lexeme(c, lexemes):
         try:
-            lexeme = c.lexeme
-            return True if lexeme in ['LPARAN','RPARAN'] else False
+            return c.lexeme in lexemes
         except:
             raise NoLexemeError()
-            return False
-        
+
     
 class NoLexemeError(Exception):        
     def __init__(self):

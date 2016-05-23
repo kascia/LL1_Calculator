@@ -14,3 +14,4 @@ class LParan(Paran):
 
 class RParan(Paran):
     lexeme = 'RPARAN'
+
