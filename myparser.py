@@ -1,5 +1,17 @@
 from myidentifier import Identifier
 
+'''
+EBNF
+{} ; repeat more than or equal to 0.
+[] ; selective usage
+
+Expression := Term { ( '+' | '-' ) Term }
+Term       := Factor { ( '*' | '/' ) Factor }
+Factor     := ( '(' Expression ')' 
+              | '-' Factor
+              | Number 
+              )
+'''
 class Parser:
     
     def __init__(self, tokens):
